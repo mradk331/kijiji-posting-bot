@@ -136,7 +136,7 @@ public class url {
 
 
 			cdriver.findElement(By.xpath("//*[@id=\"LoginEmailOrNickname\"]")).sendKeys("frederichenry070@gmail.com");
-			cdriver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys("qwerty");
+			cdriver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys("1234");
 			Thread.sleep(900);
 			cdriver.findElement(By.xpath("//*[@id=\"SignInButton\"]")).click();
 
