@@ -134,9 +134,16 @@ public class url {
 			WebElement element = cdriver.findElement(By.xpath("//*[@id=\"MainContainer\"]/div[1]/div/header/div[3]/div[1]/div/div[2]/div/div[2]/a[2]"));
 			element.click();
 
+			//get active username and password from file
+			
+			loginDetails login = new loginDetails();
+			logins namePass = login.getActive();
 
-			cdriver.findElement(By.xpath("//*[@id=\"LoginEmailOrNickname\"]")).sendKeys("x@gmail.com");
-			cdriver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys("1234");
+			String username = namePass.getUsrname();
+			String password = namePass.getPasswd();
+			
+			cdriver.findElement(By.xpath("//*[@id=\"LoginEmailOrNickname\"]")).sendKeys(username);
+			cdriver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys(password);
 			Thread.sleep(900);
 			cdriver.findElement(By.xpath("//*[@id=\"SignInButton\"]")).click();
 
@@ -150,8 +157,12 @@ public class url {
 
 
 		getads();
-
-	}
+		sleeper(4500);
+		
+		//cdriver.quit();
+		//cdriver.close();
+		cdriver.quit();
+		}
 
 
 
@@ -161,6 +172,8 @@ public class url {
 	private static void tester(int i) throws ParserConfigurationException, SAXException, IOException, InterruptedException, URISyntaxException, AWTException {
 		// TODO Auto-generated method stub
 		Robot r = new Robot();
+		//r.delay(30);
+		
 		//postads = xmldebuild();
 		//cdriver.navigate().to("https://www.kijiji.ca/p-admarkt-post-ad.html?categoryId=773&adTitle=" + postads.get(0).getName());
 		sleeper(2000);
@@ -182,9 +195,7 @@ public class url {
 		try {
 			File file = null;
 			//file = new File(url.class.getClassLoader().getResource(path).toURI());
-			r.delay(70);
-
-
+			
 
 			//sleeper(1000);
 
@@ -201,7 +212,7 @@ public class url {
 //"1" "2" "3" "4" "5"
 
 				title = firstWord.toLowerCase() + " " + secondWord.toLowerCase() + "\\\"1\" \"2\" \"3\" \"4\" \"5\""; // + (char) (x + '0') + ".jpg"; 
-				fullpath = path.toLowerCase() + title;
+				fullpath = path.toLowerCase() + title + " ";
 
 
 				
@@ -213,17 +224,35 @@ public class url {
 				}
 
 
-				System.out.println(fullpath);	
-				Thread.sleep(1000);	
+				//System.out.println(fullpath);	    //used for debugging
+				Thread.sleep(2500);	
+				
+				//testing
+				
+
+				
+				
+				
+				
+				
 				r.keyPress(KeyEvent.VK_ENTER);    // confirm by pressing Enter in the end
 			
-				r.keyRelease(KeyEvent.VK_ENTER);
-				//System.out.println(path);	
-				Thread.sleep(100);	
-			
-				r.keyPress(KeyEvent.VK_ENTER);    // confirm by pressing Enter in the end
+				r.delay(40);
+
 				
 				r.keyRelease(KeyEvent.VK_ENTER);
+				//System.out.println(path);	
+				//Thread.sleep(50);	
+				r.delay(40);
+
+				r.keyPress(KeyEvent.VK_ENTER);    // confirm by pressing Enter in the end
+				
+				r.delay(40);
+
+				r.keyRelease(KeyEvent.VK_ENTER);
+				
+				r.delay(40);
+
 				
 			//}
 
@@ -496,8 +525,8 @@ public class url {
 	private static void deleteads() throws InterruptedException {
 
 		sleeper(1500);
-		
-		
+		//*[@id="mainPageContent"]/div/div/div/div[4]/ul/li[1]/div[2]/div/ul/li[2]/button
+		////*[@id="mainPageContent"]/div/div/div/div[4]/ul/li[2]/div[2]/div/ul/li[2]/button
 		try {
 		String path = "/html/body/div[3]/div[4]/div/div/div/div[3]/ul/li[1]/div[2]/div/ul/li[2]/button";
 		//String path = "//*[@id="MainContainer"]/div[4]/div/div/div[3]/ul/li/div[2]/div/ul/li[2]/button";
@@ -507,11 +536,32 @@ public class url {
 		
 		catch (Exception e)
 		{
+			try {
 			String path = "/html/body/div[3]/div[4]/div/div/div/div[3]/ul/li/div[2]/div/ul/li[2]/button";
 			//String path = "//*[@id="MainContainer"]/div[4]/div/div/div[3]/ul/li/div[2]/div/ul/li[2]/button";
 			cdriver.findElement(By.xpath(path)).click();
 			sleeper(600);
+			}
 			
+			catch (Exception e1)
+			{
+				try {
+				String path = "//*[@id=\"mainPageContent\"]/div/div/div/div[4]/ul/li[1]/div[2]/div/ul/li[2]/button";
+				//String path = "//*[@id="MainContainer"]/div[4]/div/div/div[3]/ul/li/div[2]/div/ul/li[2]/button";
+				cdriver.findElement(By.xpath(path)).click();
+				sleeper(600);
+				}
+				
+				catch (Exception e2) 
+				{
+					
+					String path = "//*[@id=\"mainPageContent\"]/div/div/div/div[4]/ul/li[2]/div[2]/div/ul/li[2]/button";
+					//String path = "//*[@id="MainContainer"]/div[4]/div/div/div[3]/ul/li/div[2]/div/ul/li[2]/button";
+					cdriver.findElement(By.xpath(path)).click();
+					sleeper(600);
+				}
+				
+			}
 			
 		}
 		
@@ -543,6 +593,21 @@ public class url {
 
 		postads = xmldebuild(0);
 		Collections.shuffle(postads);   //randomizes the order
+		int count = 0;
+		int count1 = 0;
+		for(int j = 0; j < postads.size(); j++)
+		{
+			
+			if (postads.get(j).getActive() != 0)
+			{
+				count++;
+			}
+				
+		}
+		
+		
+		
+			
 		for(int i = 0; i < postads.size(); i++)
 		{
 			
@@ -553,7 +618,7 @@ public class url {
 				keygenerator('\n');
 				
 			cdriver.navigate().to("https://www.kijiji.ca/p-admarkt-post-ad.html?categoryId=773&adTitle=" + postads.get(i).getName());
-			sleeper(3500);
+			sleeper(4500);
 
 
 
@@ -623,7 +688,7 @@ for (int n = 0; n<4; n++)
 				catch(Exception e1)
 				{
 					
-					System.out.println("Incorrect postal code configuration, or postal code already entered");
+					//System.out.println("Incorrect postal code configuration, or postal code already entered");
 					//throw new Exception();
 				}				
 			}
@@ -711,11 +776,11 @@ for (int n = 0; n<4; n++)
 			}
 			sleeper(400);
 
-
+			
 
 			//images
 			tester(i);
-			sleeper(40000);
+			sleeper(50000);
 
 
 			if (adDeleted)   //if ads were deleted, then must wait to post
@@ -730,7 +795,13 @@ for (int n = 0; n<4; n++)
 			////*[@id="MainForm"]/div[8]/button[1]
 			////*[@id="PostAdPreview"]
 			////*[@id="MainForm"]/div[8]/button[1]
+			
+			count1++;
+			
+			System.out.println("Posted ad " + count1 + " out of " + count + "." );
 		}	
+			
+				
 		}
 	}
 
@@ -753,14 +824,28 @@ for (int n = 0; n<4; n++)
 	public static void main (String args[]) throws InterruptedException, ParserConfigurationException, TransformerException, SAXException, IOException, URISyntaxException, AWTException
 	{
 
-		Scanner reader = new Scanner(System.in);
+		Scanner reader;
+		
+		loginDetails test = new loginDetails();
 		
 		
-
-		System.out.println("0) Delete ads \n1) Create another ad \n2) Create all ads \n3) View ads \n4) Post \n5) Toggle active ads");
+		
+		
+		
+while (true)
+	
+{
+		reader = new Scanner(System.in);
+		System.out.println("0) Delete ads \n1) Create another ad \n2) Create all ads \n3) View ads \n4) Post \n5) Toggle active ads \n6) User login settings \nx) Exit");
+		
+		
 		str = reader.nextLine();
 		
-		while(!str.equals("4"))
+		while(str.length() <= 0)
+			{ System.out.println("need input");
+			str = reader.nextLine();
+			}
+		while(!(str.charAt(0) == ('4')))  
 			
 		{	
 		if(str.equals("2"))
@@ -779,6 +864,15 @@ for (int n = 0; n<4; n++)
 		{
 			insertadd();
 
+		}
+		
+		else if (str.equals("7"))
+		{
+			
+			
+			ArrayList<forsale> ads = xmldebuild(0);
+			hoster host = new hoster(ads);
+			host.hostfile();
 		}
 		
 		else if(str.equals("0"))
@@ -807,9 +901,42 @@ for (int n = 0; n<4; n++)
 				}
 		}
 		
-		System.out.println("0) Delete ads \n1) Create another ad \n2) Create all ads \n3) View ads \n4) Post \n5) Toggle active ads");
+		else if(str.equals("6"))
+		{
+			
+			
+			try {
+				 test.configureUsers(reader);
+			}
+			
+			catch (Exception e)
+			{
+				System.out.println("something wrong");
+			}
+			
+		}
+			
+			
+			
+		else if(str.toLowerCase().equals("x"))
+		{		
+				System.exit(0);
+							
+		}
+		
+		else 
+		{
+			
+			System.out.println("Bad Choice \n");
+		}
+		
+		System.out.println("0) Delete ads \n1) Create another ad \n2) Create all ads \n3) View ads \n4) Post \n5) Toggle active ads \n6) User login settings \nx) Exit");
 		str = reader.nextLine();
 		
+		while(str.length() <= 0)
+		{ System.out.println("need input");
+		str = reader.nextLine();
+		}
 		}
 
 	/*	Timer timer = new Timer();
@@ -832,12 +959,30 @@ for (int n = 0; n<4; n++)
 		timer.cancel();
 
 		//once finished */
-		reader.close();
+		
 
 		System.out.println("Running");
 		try {
+			if(str.length() > 1)
+				
+			{
+			try {
+				
+				if( str.charAt(1) == ('.'))
+					
+					
+						sleeper(Integer.parseInt(String.valueOf(str.substring(2))) * 60000);
+				else
+					System.out.println("input must be of the form 4.x, where 'x' is a integer, to wait for xish mins before posting");
+			}
 
-
+				catch(Exception e)
+			{
+					System.out.println("input must be of the form 4.x, where 'x' is a integer , to wait for xish mins before posting");
+					
+			}
+			
+			}
 			System.out.println("Working Directory = " +
 					System.getProperty("user.dir"));
 
@@ -862,9 +1007,21 @@ for (int n = 0; n<4; n++)
 		}
 
 str = "2";
-		bot ("2");
+try {
+	adDeleted = false;
+	bot ("2");
+}
+
+catch (Exception e)
+{
+	reader.close();
+System.out.println("something terrible has happened");
+System.out.println(e);
+
+}
 
 
+}
 		//cdriver.quit();
 
 	}
@@ -881,7 +1038,15 @@ str = "2";
 		while(!input.toLowerCase().equals("b"))
 		{
 			
-		try {File fXmlFile = new File("laptops.xml"); }
+		try {File fXmlFile = new File("laptops.xml"); //file should exist first
+		
+		
+		if (!fXmlFile.exists())
+		{
+			
+			throw new Exception();
+		}
+		}   //make sure file is there
 
 		catch(Exception e)
 		{
@@ -926,13 +1091,13 @@ str = "2";
 				
 				if (Integer.parseInt(childs.item(5).getTextContent()) != 0)
 						{
-					System.out.println(temp + ") " + eElement.getAttribute("identity") + " is active: " );
+					System.out.println(temp + ") " + eElement.getAttribute("identity") + " is active:        ++" );
 						}
 				
 				
 				else if (Integer.parseInt(childs.item(5).getTextContent()) == 0)
 				{
-					System.out.println(temp + ") " + eElement.getAttribute("identity") + " is inactive: " );
+					System.out.println(temp + ") " + eElement.getAttribute("identity") + " is inactive:        --" );
 				}
 			
 			
@@ -971,6 +1136,7 @@ str = "2";
 		}
 	
 		}
+		
 		
 	}
 	
@@ -1187,7 +1353,8 @@ str = "2";
 		String temp = "";
 		String size = "";
 		int count = 1;
-
+		
+		Scanner reader = new Scanner(System.in);
 		while(true)
 		{
 			name = "";
@@ -1196,7 +1363,7 @@ str = "2";
 			zip = "";
 			temp = "";
 			size = "";
-			Scanner reader = new Scanner(System.in);  // Reading from System.in
+			//Scanner reader = new Scanner(System.in);  // Reading from System.in
 			System.out.println("Ad title..... \n");
 
 			name = reader.nextLine();
@@ -1221,10 +1388,22 @@ str = "2";
 			zip = reader.nextLine();
 
 
-			System.out.println("Screen size.... 14 / 15 / 16 / 17\n");
+			System.out.println("Screen size.... 14 (or less) / 15 / 16 / 17\n");
+			
 			size  = reader.nextLine();
+			if (Integer.parseInt(size) <= 14)
+			{
+				size = "14";
+				
+				
+			}
 
-
+			if (Integer.parseInt(size) >= 17)
+			{
+				size = "17";
+				
+				
+			}
 
 			forsale fors = new forsale(name, desc, price, zip, size, 1);
 			fors.print();
@@ -1235,8 +1414,9 @@ str = "2";
 
 			if (reader.nextLine().toLowerCase().equals("n") )
 			{
-
+				reader.close();
 				break;
+				
 			}
 
 
@@ -1249,7 +1429,7 @@ str = "2";
 
 		xmlwriter();
 
-
+		
 	}
 
 
@@ -1316,6 +1496,9 @@ str = "2";
 
 		transformer.transform(source, result);
 
+		result = new StreamResult(new File(("C:\\Users\\root\\Desktop\\laptops\\laptops.xml")));
+		transformer.transform(source, result);
+		
 	}
 
 	
@@ -1353,10 +1536,22 @@ str = "2";
 		zip = reader.nextLine();
 
 
-		System.out.println("Screen size.... 14 / 15 / 16 / 17\n");
+		System.out.println("Screen size.... 14 (or less) / 15 / 16 / 17\n");
+		
 		size  = reader.nextLine();
+		if (Integer.parseInt(size) <= 14)
+		{
+			size = "14";
+			
+			
+		}
 
-
+		if (Integer.parseInt(size) >= 17)
+		{
+			size = "17";
+			
+			
+		}
 
 		forsale fors = new forsale(name, desc, price, zip, size, 1);
 		
